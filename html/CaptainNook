@@ -1,0 +1,61 @@
+HTML for Captain Nook
+
+<!DOCTYPE html>
+<html>
+<head lang="en">
+	<meta charset="UTF-8">
+	<link href="https://goo.gl/lelqzP" rel="stylesheet" />
+</head>
+
+<body background=http://faculty.washington.edu/shaosong/bg.jpg>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+
+<nav>
+<ul>
+<li><a href=home.html>Home</a></li>
+<li><a href=destination.html>Destination</a>
+
+<ul>
+<li><a href=antarctica.html>Antarctica</li>
+<li><a href=brazil.html>Brazil</li>
+<li><a href=columbia.html>Columbia</li>
+</ul>
+
+
+
+</li>
+<li><a href=contact.html>Contact</a></li>
+</ul>
+</nav>
+
+<center><h3>Captain Nook</h3></center>
+
+<p>Welcome to Captain Nook: Sailing through the World with Style! We are the No. 1 travel agency in PNW specializing in luxurious and exotic destinations. Call us at 206-555-1234 for your personalized travel needs.</p>
+
+<img src=http://faculty.washington.edu/shaosong/map.jpg></img>
+
+<div/ align=right><h5>&copy;2017 by Captain Nook Inc. All rights reserved.</h5></div>
+
+<div class="fb-like" data-href="https://students.washington.edu/smlee98/travel.html" data-layout="standard" data-action="like" data-size="large" data-show-faces="true" data-share="true"></div>
+
+<div class="fb-comments" data-href="https://students.washington.edu/smlee98/travel.html" data-numposts="5"></div>
+
+</body>
+</html>
