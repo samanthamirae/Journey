@@ -1,0 +1,96 @@
+/* Greeting App developed by Samantha on 10.03.17.
+ * This app greets the user based on morning or
+ * afternoon, and also allows changing colors.
+ * The greeting is displayed multiple ways. 
+ */
+
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+
+namespace _100317._1
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void mButton_Click(object sender, EventArgs e)
+        {
+            //Executes when Morning is clicked. 
+            //Displays greeting, activates controls.
+
+            //Display Greeting
+            greetTextBox.Text = "Good Morning, " + uNameTextBox.Text +"!";
+            greetLabel.Text = "Good Morning, " + uNameTextBox.Text + "!";
+            MessageBox.Show("Good Morning, " + uNameTextBox.Text + "!");
+
+            //Activate Controls
+            greetTextBox.Visible = true;
+            greetLabel.Visible = true;
+            exitButton.Enabled = true;
+            clearButton.Enabled = true;
+        }
+
+        private void aButton_Click(object sender, EventArgs e)
+        {
+            greetTextBox.Text = "Good Afternoon!";
+            greetLabel.Text = "Good Afternoon!";
+
+            greetTextBox.Visible = true;
+            greetLabel.Visible = true;
+            exitButton.Enabled = true;
+            clearButton.Enabled = true;
+        }
+
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            //Executes when Exit is clicked.
+            //Quits the app, after saying Goodbye.
+
+            greetLabel.Text = "GoodBye!";
+            MessageBox.Show("GoodBye!");
+            Application.Exit();
+        }
+
+        private void cButton_Click(object sender, EventArgs e)
+        {
+            this.BackColor = Color.AntiqueWhite;
+            this.ForeColor = Color.Red;
+
+            exitButton.BackColor = Color.PowderBlue;
+            exitButton.ForeColor = Color.Turquoise; 
+        }
+
+        private void clearButton_Click(object sender, EventArgs e)
+        {
+            //Executes when Clear is clicked.
+            //Clears inputs/ outputs,
+            //and gets ready for new inputs.
+
+            //Clear Outputs
+            greetTextBox.Clear();
+            greetLabel.Text = "";
+            uNameTextBox.Clear();  //clear the input
+
+            //Deactivate Controls
+            greetTextBox.Visible = false;
+            greetLabel.Visible = false;
+            clearButton.Enabled = false; //take clear back to start state
+
+            //Get Ready For New Input
+            uNameTextBox.Focus();
+
+        }
+    }
+}
+
+
