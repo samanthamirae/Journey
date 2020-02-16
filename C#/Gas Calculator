@@ -1,0 +1,331 @@
+/* 
+ * This app allows the user to enter the number of gallons
+ * they want to fill and select a grade of fuel. 
+ * The total cost is then displayed and the
+ * textbox is cleared for the next customer. This app also 
+ * tracks and displays total sales and the number
+ * of regular, extra, and premium gallons filled.
+ * It also allows the gas station manager user to 
+ * change the gas prices.  
+ */ 
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+
+namespace SLeeHW5._6
+{
+    public partial class Form1 : Form
+    {
+        private bool regSelected = false;
+        private bool extraSelected = false;
+        private decimal totSales = 0m; //tracks the total sales in dollars of gas
+        private decimal regCount = 0; //counts the number of regular grade fuel gallons sold
+        private decimal extraCount = 0; //counts the number of extra grade fuel gallons sold
+        private decimal premCount = 0; //counts the number of premium grade fuel gallons sold
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void regButton_Click(object sender, EventArgs e)
+        {
+            regButton.BackColor = Color.Yellow;
+
+            extraButton.UseVisualStyleBackColor = true;
+            premiumButton.UseVisualStyleBackColor = true;
+
+            EnableButtons();
+
+            regSelected = true;
+            gallonsTextBox.Focus();
+        }
+
+        private void extraButton_Click(object sender, EventArgs e)
+        {
+            extraButton.BackColor = Color.Yellow;
+
+            regButton.UseVisualStyleBackColor = true;
+            premiumButton.UseVisualStyleBackColor = true;
+
+            EnableButtons();
+
+            extraSelected = true;
+            gallonsTextBox.Focus();
+        }
+
+        private void premiumButton_Click(object sender, EventArgs e)
+        {
+            premiumButton.BackColor = Color.Yellow;
+            
+            extraButton.UseVisualStyleBackColor = true;
+            regButton.UseVisualStyleBackColor = true;
+
+            EnableButtons();
+
+            gallonsTextBox.Focus();
+        }
+
+        private void finishButton_Click(object sender, EventArgs e)
+        {
+            regSelected = false;
+            extraSelected = false;
+
+            GetReadyForNewInputs();
+            ResetForm();
+
+            fillButton.Enabled = false;
+        }
+
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void fillButton_Click(object sender, EventArgs e)
+        {
+            //Declarations
+            decimal cost;   //output
+            decimal gallons;  //input
+            
+            //Inputs
+            gallons=decimal.Parse(gallonsTextBox.Text);
+
+
+            if (IsValid(gallons) == true)
+            {
+                //Computations
+                cost = ComputeOrderPrice(gallons);
+
+                //Outputs
+                costTextBox.Text = cost.ToString("C");
+
+                //Update Totals
+                totSales = totSales + cost;
+            }
+            else
+            {
+                MessageBox.Show("Operation Cancelled");
+
+                GetReadyForNewInputs();
+                ResetForm();
+            }
+
+            FormMaintenance();
+        }
+
+        private void salesButton_Click(object sender, EventArgs e)
+        {
+            SalesSummary();
+        }
+
+        private void pricesButton_Click(object sender, EventArgs e)
+        {
+            MakeControlsVisible();
+
+        }
+
+        private void updateButton_Click(object sender, EventArgs e)
+        {
+
+            if (newRegPriceTextBox.Text == String.Empty)
+            { regPriceLabel.Text = regPriceLabel.Text; }
+            else
+            {
+                decimal newRegularDec;
+                newRegularDec = decimal.Parse(newRegPriceTextBox.Text);
+                regCurrentPriceLabel.Text = "Regular: " + newRegularDec.ToString("C");
+                regPriceLabel.Text = newRegularDec.ToString("C");   //output
+            }
+
+
+            if (newExPriceTextBox.Text == String.Empty)
+            { exPriceLabel.Text = exPriceLabel.Text; }
+            else
+            {
+                decimal newExtraDec;
+                newExtraDec = decimal.Parse(newExPriceTextBox.Text);
+                exCurrentPriceLabel.Text = "Extra: " + newExtraDec.ToString("C");
+                exPriceLabel.Text = newExtraDec.ToString("C");   //output
+            }
+
+
+            if (newPremPriceTextBox.Text == String.Empty)
+            { premPriceLabel.Text = premPriceLabel.Text; }
+            else
+            {
+                decimal newPremiumDec;
+                newPremiumDec = decimal.Parse(newPremPriceTextBox.Text);
+                premCurrentPriceLabel.Text = newPremiumDec.ToString("C");
+                premPriceLabel.Text = "Premium: " + newPremiumDec.ToString("C");  //output
+            }
+
+            MakeControlsInvisible();
+            ReadyForNewUpdates();
+        }
+
+        private void cancelButton_Click(object sender, EventArgs e)
+        {
+            MakeControlsInvisible();
+        }
+
+        private void eodButton_Click(object sender, EventArgs e)
+        {
+            SalesSummary();
+
+            MessageBox.Show("Reset?");
+
+            ResetData();
+            ResetForm();
+            GetReadyForNewInputs();
+            EODReset();
+        }
+
+
+
+
+
+
+
+
+
+
+
+//---------------------------------My Methods-------------------------------------
+
+        private decimal ComputeOrderPrice(decimal gals)
+        {
+            decimal cost;
+            decimal reg = 3.70m;
+            decimal ex = 3.90m;
+            decimal prem = 4.10m;
+
+            if (regSelected == true)
+            { cost = gals * reg;
+            regCount = regCount + gals;
+            }
+            else if (extraSelected == true)
+            { cost = gals * ex;
+            extraCount = extraCount + gals;
+            }
+            else
+            { cost = gals * prem;
+            premCount = premCount + gals;
+            }
+
+            return cost;
+        }
+
+        private void GetReadyForNewInputs()
+        {
+            gallonsTextBox.Clear();
+            costTextBox.Clear();
+            gallonsTextBox.Focus();
+        }
+
+        private void ResetForm()
+        {
+            extraSelected = false;
+            regSelected = false;
+
+            regButton.UseVisualStyleBackColor = true;
+            extraButton.UseVisualStyleBackColor = true;
+            premiumButton.UseVisualStyleBackColor = true;
+
+            gallonsTextBox.Enabled = false;
+        }
+
+        private void EnableButtons()
+        {
+            gallonsTextBox.Enabled = true;
+            fillButton.Enabled = true;
+            
+        }
+
+        private bool IsValid(decimal gals)
+        {
+            bool valid;
+            valid = true;
+
+            if (gals == 0)
+            { valid = false; }
+           
+            return valid;
+        }
+
+        private void MakeControlsVisible()
+        {
+            newRegPriceTextBox.Visible = true;
+            newExPriceTextBox.Visible = true;
+            newPremPriceTextBox.Visible = true;
+            updateButton.Visible = true;
+            cancelButton.Visible = true;
+            label10.Visible = true;
+            regCurrentPriceLabel.Visible = true;
+            exCurrentPriceLabel.Visible = true;
+            premCurrentPriceLabel.Visible = true;
+            label1.Visible = true;
+        }
+
+        private void MakeControlsInvisible()
+        {
+            newRegPriceTextBox.Visible = false;
+            newExPriceTextBox.Visible = false;
+            newPremPriceTextBox.Visible = false;
+            updateButton.Visible = false;
+            cancelButton.Visible = false;
+            label10.Visible = false;
+            regCurrentPriceLabel.Visible = false;
+            exCurrentPriceLabel.Visible = false;
+            premCurrentPriceLabel.Visible = false;
+            label1.Visible = false;
+        }
+
+        private void SalesSummary()
+        {
+            MessageBox.Show("Number of Regular Grade Gallons of Fuel Sold: " + regCount.ToString("N0") + Environment.NewLine +
+               "Number of Extra Grade Gallons of Fuel Sold: " + extraCount.ToString("N0") + Environment.NewLine +
+               "Number of Premium Grade Gallons of Fuel Sold: " + premCount.ToString("N0") + Environment.NewLine +
+               "Total Sales Is: " + totSales.ToString("C") + Environment.NewLine);
+        }
+
+        private void ResetData()
+        {
+            totSales = 0;
+            regCount = 0;
+            extraCount = 0;
+            premCount = 0;
+        }
+
+        private void FormMaintenance()
+        {
+            finishButton.Enabled = true;
+            exitButton.Enabled = true;
+            salesButton.Enabled = true;
+            pricesButton.Enabled = true;
+            eodButton.Enabled = true;
+        }
+
+        private void ReadyForNewUpdates()
+        {
+            newRegPriceTextBox.Clear();
+            newExPriceTextBox.Clear();
+            newPremPriceTextBox.Clear();
+            newRegPriceTextBox.Focus();
+        }
+
+        private void EODReset()
+        {
+            salesButton.Enabled = false;
+            eodButton.Enabled = false;
+            pricesButton.Enabled = false;
+            finishButton.Enabled = false;
+        }
+    }
+}
