@@ -1,0 +1,175 @@
+//Samantha Lee
+
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace SLeeHW6._1
+{
+    class Employee
+    {
+        //Fields
+        private String ename;
+        private decimal salary;
+        private int hours;
+        private decimal bonus; 
+
+        //Static Fields
+        private static int count = 0; //tracks the number of employees
+        private static decimal totSalary = 0m; //tracks the total salary
+        private static int bonusCount = 0; //tracks the number of employees getting a bonus
+        private static decimal totBonus = 0m; //tracks the total number of bonuses given
+
+        //Properties
+        public String Ename
+        {
+            get { return ename; }
+            set { ename = value; }
+        }
+        public decimal Salary
+        {
+            get { return salary; }
+            set { salary = value; }
+        }
+        public int Hours
+        {
+            get { return hours; }
+            set { hours = value; }
+        }
+        public decimal Bonus
+        {
+            get { return bonus; }
+            set { bonus = value; }
+        }
+
+        //Static properties
+        public static int Count
+        {
+            get { return count; }
+            set { count = value; }
+        }
+
+        public static decimal TotSalary
+        {
+            get { return totSalary; }
+            set { totSalary = value; }
+        }
+
+        public static int BonusCount
+        {
+            get { return bonusCount; }
+            set { bonusCount = value; }
+        }
+
+        public static decimal TotBonus
+        {
+            get { return totBonus; }
+            set { totBonus = value; }
+        }
+
+
+        //Constructor 
+        public Employee(String nm, decimal sal, int hrs)
+        {
+            Ename = nm;
+            Salary = sal;
+            Hours = hrs; 
+
+            Bonus = ComputeBonus();
+
+            //Update totals
+            Count = Count + 1;
+            TotSalary = Salary + TotSalary;
+            TotBonus = TotBonus + Bonus;
+        }
+
+        //Default Constructor
+        public Employee()
+        {
+            Ename = "NoName";
+            Salary = 0;
+            Hours = 0;
+            Bonus = 0;
+        }
+        
+
+        //Methods
+        private decimal ComputeBonus()
+        {
+            decimal bonus;
+
+            bonus = 0;
+            if (Hours > 45)
+            { bonus = (Hours - 45) * 10;
+            bonusCount = bonusCount + 1;
+            }
+
+            return bonus;
+        }
+
+        //Output Methods
+        public override String ToString()
+        {
+            return "Name: " + Ename + Environment.NewLine + "Salary: " + Salary.ToString("C") + Environment.NewLine + "Bonus: " + Bonus.ToString("C") + Environment.NewLine;
+        }
+
+        public static String DisplaySummary()
+        {
+            return "The Average Salary Is: " + Employee.AverageSalary().ToString("C")
+                + Environment.NewLine + "The Average Bonus Is: " + Employee.AverageBonus().ToString("C") + Environment.NewLine
+            + "The Number of Employees Who Have Received a Bonus: "
+                + Employee.GetBonusCount().ToString("N0") + Environment.NewLine;
+        }
+
+
+        public static int GetCount()
+        {
+            return Count;
+        }
+
+        public static decimal GetTotalSalary()
+        {
+            return TotSalary;
+        }
+
+        public static void ResetData()
+        {
+            Count = 0;
+            TotSalary = 0m;
+            BonusCount = 0;
+        }
+
+        public static decimal AverageSalary()
+        {
+            decimal avg;
+
+            if (count > 0)
+            { avg = TotSalary / Count; }
+            else
+            { avg = 0m; }
+
+            return avg;
+        }
+
+        public static int GetBonusCount()
+        {
+            return BonusCount;
+        }
+
+        public static decimal AverageBonus()
+        {
+            decimal avgb;
+
+            if (count > 0)
+            { avgb = TotBonus / Count; }
+            else
+            { avgb = 0m; }
+            
+            return avgb;
+        }
+        
+
+
+    }
+}
