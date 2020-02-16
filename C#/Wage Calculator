@@ -1,0 +1,163 @@
+/* 
+ * This application takes the total amount of hours worked and 
+ * determines the wage rate and tax rate for the amount of 
+ * hours inputted by the user. The total amount of tax is then 
+ * calculated and then the gross pay and net pay are displayed 
+ * in textboxes. 
+ * 
+ */ 
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+
+namespace SLeeHW4._1
+{
+    public partial class Form1 : Form
+    {
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void calculateButton_Click(object sender, EventArgs e)
+        {
+            //Declarations
+
+            decimal hoursDec;    //inputs 
+            decimal grossPayDec, taxesDec, netPayDec;    //outputs
+
+
+            //Inputs
+
+            hoursDec = decimal.Parse(hoursTextBox.Text);
+
+            
+            //Computations
+           
+            //---Compute the gross pay
+            grossPayDec = ComputeGrossPay(hoursDec);
+
+           
+
+            //---Compute the Tax
+
+            taxesDec = ComputeTax(grossPayDec);
+
+       
+
+            //---Compute the Net Pay
+
+            netPayDec = grossPayDec - taxesDec; 
+         
+
+            //Outputs
+
+            grossPayTextBox.Text = "Your Gross Pay Is " + grossPayDec.ToString("C") + ".";
+            taxesTextBox.Text = "Your Tax Amount Is " + taxesDec.ToString("C") + ".";
+            netPayTextBox.Text = "Your Net Pay Is " + netPayDec.ToString("C") + ".";
+                    
+
+            //Form Maintenance
+            exitButton.Enabled = true;
+            clearButton.Enabled = true;
+            
+        }
+
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            //Closes the app
+            Application.Exit();
+        }
+
+        private void clearButton_Click(object sender, EventArgs e)
+        {
+            //Clears the textboxes and gets ready for new inputs
+
+            hoursTextBox.Clear();
+            grossPayTextBox.Clear();
+            taxesTextBox.Clear();
+            netPayTextBox.Clear();
+
+            //DeActivates clear button
+            clearButton.Enabled = false;
+
+            //Sets focus on first textbox
+            hoursTextBox.Focus();
+        }
+
+
+//-----------------------My Methods-------------------------------
+
+        private decimal ComputeGrossPay(decimal hrs)
+        {
+            decimal gpay; //grosspay
+            decimal regHours;
+            decimal otHours;
+            decimal payRt;
+            decimal otPayRt;
+
+            regHours = 40m;
+            otHours = 0m;
+            payRt = 10m;
+            otPayRt = 15m;
+
+            if (hrs > 40m)
+            {
+                otHours = hrs - regHours;
+            }
+            else
+            {
+                regHours = hrs;
+                otHours = 0m;
+            }
+
+            //Calculate the gross pay
+            gpay = (payRt * regHours) + (otPayRt * otHours);
+            
+
+            return gpay;
+        }
+
+        private decimal ComputeTax(decimal gpay)
+        {
+            decimal tx;
+            decimal txRt1, txRt2, txRt3, teir1, teir2, teir3;
+            
+            txRt1 = 0.15m;
+            txRt2 = 0.2m;
+            txRt3 = 0.25m;
+
+
+            if (gpay <= 300m) //if the gross pay is less than or equal to $300
+            {
+                tx = gpay * txRt1;
+            }
+            else if (gpay <= 450m)  //if the gross pay is less than or equal to $450
+            {
+                teir1 = 300m;
+                teir2 = gpay - teir1;
+
+                tx = (teir1 * txRt1) + (teir2 * txRt2);
+            }
+            else   //if the gross pay is over $450
+            {
+                teir1 = 300m;
+                teir2 = 150m;
+                teir3 = gpay - (teir1 + teir2);
+
+                tx = (teir1 * txRt1) + (teir2 * txRt2) + (teir3 * txRt3);
+            }
+
+
+            return tx; 
+        }
+
+
+    }
+}
