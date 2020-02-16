@@ -1,0 +1,127 @@
+/* This app creates and displays employee information including name, salary, 
+ * and bonus amount based on the inputs put in by the user. Calculations are 
+ * done to determine outputs such as the average salary, bonus, and average bonus. 
+ * 
+ */ 
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+
+namespace SLeeHW6._1
+{
+    public partial class Form1 : Form
+    {
+        private List<Employee> Employees = new List<Employee>();
+
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void submitButton_Click(object sender, EventArgs e)
+        {
+            //Declarations
+            Employee newEmployee;
+
+            String ename;
+            int hours;
+            decimal salary;
+
+
+            //Inputs
+            ename = nameTextBox.Text;
+            hours = int.Parse(hoursTextBox.Text);
+            salary = decimal.Parse(salaryTextBox.Text);
+                        
+            //Computations
+            //Create New Object
+            newEmployee = new Employee(ename, salary, hours);
+            //--Add the object to the list 
+            Employees.Add(newEmployee);
+
+            //Outputs
+            outputTextBox.AppendText(newEmployee.ToString());
+
+            GetReadyForNewInputs();
+            ActivateButtons();
+        }
+
+        private void summaryButton_Click(object sender, EventArgs e)
+        {
+            outputTextBox.AppendText(Employee.DisplaySummary());
+            nameTextBox.Focus();
+            clearButton.Enabled = true;
+        }
+
+        private void resetButton_Click(object sender, EventArgs e)
+        {
+            Employee.ResetData();
+            ResetForm();
+            Employees.Clear();   //empty out the list
+        }
+
+        private void exitButton_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+            Employees.Clear();   //garbage collection
+        }
+
+        private void GetReadyForNewInputs()
+        {
+            nameTextBox.Clear();
+            salaryTextBox.Clear();
+            hoursTextBox.Clear();
+            nameTextBox.Focus();
+        }
+
+        private void ResetForm()
+        {
+            outputTextBox.Clear();
+            GetReadyForNewInputs();
+
+            DeActivateButtons();
+        }
+
+        private void clearButton_Click(object sender, EventArgs e)
+        {
+            outputTextBox.Clear();
+            GetReadyForNewInputs();
+
+        }
+
+        private void displayButton_Click(object sender, EventArgs e)
+        {
+            foreach (Employee emp in Employees)
+            {
+                //Earnings = Salary + Bonus
+                decimal earnings = emp.Salary + emp.Bonus;
+
+                outputTextBox.AppendText("Name: " + emp.Ename + Environment.NewLine+ "Earnings: " + earnings.ToString("C"));
+                outputTextBox.AppendText(Environment.NewLine);
+            }
+        }
+
+        private void ActivateButtons()
+        {
+            resetButton.Enabled = true;
+            clearButton.Enabled = true;
+            displayButton.Enabled = true;
+            exitButton.Enabled = true;
+        }
+
+        private void DeActivateButtons()
+        {
+            resetButton.Enabled = false;
+            displayButton.Enabled = false;
+            clearButton.Enabled = false;
+        }
+
+    }
+}
