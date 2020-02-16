@@ -1,0 +1,168 @@
+/* The user inputs the quantity to be ordered and then
+ * selects Submit button. User can submit more orders or
+ * click the Revenue Summary button (at EOD) to display
+ * revenue, profit, and average profit for the day. Each 
+ * order is first validated before being processed. 
+ * 
+ */ 
+
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Windows.Forms;
+
+namespace SLeeHW6._2
+{
+    public partial class Form1 : Form
+    {
+        private int stockQuantity = 500; //starting stock amount at beginning of day
+        private int unMetOrderCount = 0; //tracks number of unmet orders
+        private int qtyUpdate = 0; //tracks total quantity ordered
+        private int numInputs = 0; //tracks total  number of inputs
+
+        public Form1()
+        {
+            InitializeComponent();
+        }
+
+        private void submitButton_Click(object sender, EventArgs e)
+        {
+            int index, quantity;
+            bool canFulfil;
+
+            index = quantityListBox.SelectedIndex;
+
+
+            if (index == 0)
+            { quantity = 10; }
+            else if (index == 1)
+            { quantity = 50; }
+            else if (index == 2)
+            { quantity = 100; }
+            else if (index == 3)
+            { quantity = 200; }
+            else
+            { quantity = 0; }
+
+            //Check to see if the quantity is available
+            canFulfil = CanFulfilOrder(quantity);
+
+            if (canFulfil == true)
+            {
+                stockQuantity = stockQuantity - quantity;
+                qtyUpdate = qtyUpdate + quantity;
+
+                outputTextBox.AppendText("Ordered " + quantity.ToString("N0")
+                    + " : Remaining Stock " + stockQuantity.ToString("N0") + Environment.NewLine);
+
+                unMetOrderCount = 0; //Resets the count to 0
+                numInputs = numInputs + 1;
+            }
+            else
+            {
+                outputTextBox.AppendText("Order Not Met" + Environment.NewLine);
+                unMetOrderCount = unMetOrderCount + 1;
+
+                if (unMetOrderCount >= 2) //Two consecutive fails
+                {
+                    EndOfDay();
+                }
+            }
+
+            if (stockQuantity < 10)
+            {
+                EndOfDay();
+            }
+
+            quantityListBox.ClearSelected();
+        }
+
+
+        private bool CanFulfilOrder(int qty)
+        {
+            bool isValid;
+
+            if (qty <= stockQuantity)  
+            { isValid = true; }
+            else
+            { isValid = false; }
+
+            return isValid;
+        }
+
+        private void summaryButton_Click(object sender, EventArgs e)
+        {
+                decimal costDec, revenueDec, profitDec, avgProfit;
+
+                costDec = CalculateCost();
+                revenueDec = CalculateRevenue();
+                profitDec = revenueDec - costDec;
+                avgProfit = CalcAverage(profitDec);
+
+                if (numInputs > 0)
+                {
+                    outputTextBox.AppendText("Revenue: " + revenueDec.ToString("C") + Environment.NewLine + "Profit: "
+                        + profitDec.ToString("C") + Environment.NewLine + "Average Profit: " + avgProfit.ToString("C") + Environment.NewLine);
+                }
+        }
+
+        private decimal CalculateCost() 
+        {
+                decimal cost, costAmt, onSCost; //onSCost = overnight storage cost
+                costAmt = 1.6m;
+                onSCost = 0.2m;
+
+                cost = (qtyUpdate * costAmt) + (stockQuantity * onSCost);
+
+                return cost;
+        }
+
+        private decimal CalculateRevenue()
+        {
+            decimal revenue, price;
+            price = 2m;
+
+            revenue = qtyUpdate * price;
+
+            return revenue;
+        }
+
+        private decimal CalcAverage(decimal amt) //amt = amount
+        {
+            decimal avg;
+
+            try
+            {
+                avg = amt / numInputs;
+            }
+            catch
+            {
+                avg = 0m;
+                outputTextBox.AppendText("No Orders Placed Yet, No Summary Data Available" + Environment.NewLine);
+            }
+
+            return avg;
+        }
+
+        private void clearButton_Click(object sender, EventArgs e)
+        {
+            outputTextBox.Clear();
+
+            numInputs = 0;
+            qtyUpdate = 0;
+            unMetOrderCount = 0;
+            stockQuantity = 500;
+        }
+
+        private void exitButton_Click(object sender, EventArgs e)
+        { Application.Exit(); }
+
+        private void EndOfDay()
+        { outputTextBox.AppendText("No More Orders Today: Click Summary Button Now" + Environment.NewLine); }
+
+    }
+}
