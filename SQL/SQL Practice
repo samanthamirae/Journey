@@ -1,0 +1,176 @@
+select * from hollywood;
+
+select genre, avg(Profitability)
+from hollywood
+group by genre;
+
+select genre, count(genre)
+from hollywood
+where year=2010
+group by genre;
+
+select genre, avg(audiencescore)
+from hollywood
+group by genre
+having avg(AudienceScore) >50;
+
+select leadstudio, count(film)
+from hollywood
+where year=2010
+group by leadstudio
+having count(film)>1;
+
+select year, count(film)
+from hollywood
+where genre="Romance"
+group by year
+having count(film)>5;
+
+select orderid, count(ProductID)
+from orders
+group by orderid
+having count(productid)>1;
+
+select orderid, count(distinct ProductID)
+from orders
+group by orderid
+having count(orderid)>1;
+
+create table orders2
+select *, (Quantity*UnitPrice) as revenue
+from orders;
+
+
+#Wildcards
+select distinct leadstudio, film
+from hollywood
+where film like "f%" or film like "w%";
+
+#is null/ is not null
+select film, leadstudio
+from hollywood
+where leadstudio is null;
+
+select film, leadstudio
+from hollywood
+where leadstudio is not null;
+
+#date functions
+select firstname, datediff(now(),birthday)
+from famousbirthdays;
+
+select firstname, (datediff(now(),birthday))/30
+from famousbirthdays;
+
+select firstname, (datediff(now(),birthday))/365
+from famousbirthdays;
+
+#3 la crimes
+select count(*)
+from lacrimes_part2
+where CrmCd_Desc like "%theft%" and month(date_occurred)=5;
+
+
+#join
+select s.CompanyName, p.ProductName
+from product as p, supplier as s
+where s.SupplierNumber = p.SupplierNumber
+order by s.CompanyName asc;
+
+#3
+select p.ProductName, p.ProductCategory, s.CompanyName, s.ZIP
+from product as p, supplier as s
+where p.SupplierNumber = s.SupplierNumber and s.ZIP>70000
+order by s.CompanyName asc;
+
+#left join
+select p.ProductNumber, o.OrderID, o.DateReceived
+from product as p
+left join orders as o
+on o.ProductNumber=p.ProductNumber;
+
+
+#subquery
+select productname, sellingprice
+from product
+where SellingPrice > (select avg(SellingPrice) from product)
+order by ProductName asc;
+
+select * ,(sellingprice-purchasecost) as margin
+from product
+where (SellingPrice-PurchaseCost) > 150;
+
+select max(PurchaseCost), min(PurchaseCost), avg(PurchaseCost)
+from product
+where QuantityonHand<=ReorderLevel;
+
+#review all the ones below!!
+select s.CompanyName, avg(p.PurchaseCost), avg(p.SellingPrice)
+from supplier as s, product as p
+where s.SupplierNumber=p.SupplierNumber
+group by s.CompanyName;
+
+select count(*)
+from product
+where ProductCategory="children" and SellingPrice>(select avg(sellingprice) 
+from product 
+where ProductCategory="children");
+
+select p.ProductName, (SellingPrice-PurchaseCost) as BikeOneMargin
+from product as p, supplier as s
+where s.CompanyName="Bike-One"
+order by (SellingPrice-PurchaseCost) asc
+limit 1;
+
+select (max(SellingPrice-PurchaseCost)-min(SellingPrice-PurchaseCost))
+from product;
+
+select s.CompanyName, s.zip
+from supplier as s, product as p
+where s.SupplierNumber=p.SupplierNumber
+order by (p.SellingPrice-p.PurchaseCost) asc
+limit 1;
+
+#reservation
+select * from reservation;
+
+select avg(DailyRate) as AvgDailyRate
+from reservation;
+
+select roomtype, avg(dailyrate) as avgrate, avg(NoofGuests) as avgnumguests, avg(DailyRate/NoofGuests) as avgrateforone
+from reservation
+group by roomtype;
+
+select datediff(DepartureDate,ArrivalDate) as duration, id, GuestFirstName,GuestLastName
+from reservation;
+
+select * 
+from reservation
+where NoofGuests>1 and dailyrate<160;
+
+select distinct Room
+from reservation;
+
+select ArrivalDate, sum(NoofGuests) as incomingguests
+from reservation
+group by arrivaldate
+order by sum(NoofGuests) desc
+limit 3;
+
+select DailyRate, GuestLastName
+from reservation
+where GuestLastName like "c%" or GuestLastName like "%l";
+
+select roomtype, min(DailyRate) as minrate, max(DailyRate) as maxrate, avg(DailyRate) as avgrate
+from reservation
+group by roomtype;
+
+#review
+select *
+from reservation
+where roomtype = (select roomtype
+from reservation
+group by roomtype
+order by count(*) desc
+limit 1);
+
