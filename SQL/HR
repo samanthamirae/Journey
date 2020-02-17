@@ -1,0 +1,43 @@
+create schema session14HR;
+
+#natural join
+select e.employeeID, l.RegionalOffice
+from employees as e, location as l
+where e.location=l.location;
+
+#inner join
+select e.employeeID, l.RegionalOffice
+from employees as e
+inner join location as l
+on e.location=l.location;
+
+#question 2- left join
+select e.employeeID, l.RegionalOffice
+from employees as e
+left join location as l
+on e.location=l.location;
+
+#Q3
+select Location, count(*)
+from employees
+where Performance="good"
+group by Location
+order by count(*) asc
+limit 1;
+
+#Q6
+select LastName,FirstName, round(datediff(now(),hired_date)/365)
+from employees
+where round(datediff(now(),hired_date)/365>20);
+
+#Q7
+select e.EmployeeID, l.RegionalOffice
+from employees as e, location as l
+where e.Location=l.Location and l.RegionalOffice="Yes";
+
+select e.EmployeeID, l.RegionalOffice
+from employees as e
+inner join location as l
+on e.Location=l.Location
+where l.RegionalOffice="Yes";
+
