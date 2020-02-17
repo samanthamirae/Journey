@@ -1,0 +1,106 @@
+create schema airbnb;
+
+select count (disctinct uid) 
+from booking;
+
+select distinct age
+from booking
+order by age;
+
+select * 
+from booking
+where age=2;
+
+select gender, count(*)
+from booking 
+group by gender;
+
+select gender, avg(age)
+from booking
+where age<=100 and age>=10
+group by gender;
+
+#question 3!!
+select country_destination, count(*) as visitors
+from booking
+where country_destination<>"NDF" 
+group by country_destination
+having count(*)>500;
+
+select country_destination, count(*) as visitors
+from booking
+where gender="male" and country_destination<>"NDF"
+group by country_destination
+order by visitors desc
+limit 5;
+
+select country_destination, count(*) as visitors
+from booking
+where gender="female" and country_destination<>"NDF"
+group by country_destination
+order by visitors desc
+limit 5;
+
+select distinct first_device_type
+from booking;
+
+select count(*) as phonebooking
+from booking
+where first_device_type like "%phone%";
+#1458
+
+select count(*) as desktopbooking
+from booking
+where first_device_type like "%desktop%";
+#13241
+
+select count(*) as applebooking
+from booking
+where first_device_type like "i%" or first_device_type like "%mac%";
+#10241
+
+
+#TIME DIFFERENCE
+select uid, datediff(now(),date_account_created)
+from booking
+order by datediff(now(),date_account_created) desc
+limit 1;
+
+#or
+select uid, date_account_created
+from booking
+order by date_account_created desc
+limit 1;
+
+select uid, date_account_created
+from booking
+order by date_account_created asc
+limit 1;
+
+
+select count(uid)
+from booking
+where date_first_booking=date_account_created;
+
+select count(uid)
+from booking
+where month(date_account_created)=month(date_first_booking) 
+and year(date_account_created)=year(date_first_booking);
+
+select *, datediff(date_first_booking,date_account_created) as dategap
+from booking;
+
+
+#EXTRA QUESTION
+create table newbooking
+select *
+from booking
+where age > 10 and age < 150;
+
+create table bookingymd
+select year(date_first_booking)*10000 + month(date_first_booking)*100 + day(date_first_booking) as ymd
+from booking;
+
+select ymd, count(ymd)
+from bookingymd
+group by ymd;
