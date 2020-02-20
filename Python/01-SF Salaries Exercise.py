@@ -1,18 +1,5 @@
-
-# coding: utf-8
-
-# ___
-# 
-# <a href='http://www.pieriandata.com'> <img src='../../Pierian_Data_Logo.png' /></a>
-# ___
-
-# # SF Salaries Exercise 
-# 
-# Welcome to a quick exercise for you to practice your pandas skills! We will be using the [SF Salaries Dataset](https://www.kaggle.com/kaggle/sf-salaries) from Kaggle! Just follow along and complete the tasks outlined in bold below. The tasks will get harder and harder as you go along.
-
-# ** Import pandas as pd.**
-
-# In[1]:
+# Practicing my pandas skills
+# Using the [SF Salaries Dataset](https://www.kaggle.com/kaggle/sf-salaries) from Kaggle
 
 
 import pandas as pd
