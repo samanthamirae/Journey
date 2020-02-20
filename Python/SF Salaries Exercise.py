@@ -139,6 +139,3 @@ sal['title_len'] = sal['JobTitle'].apply(len)
 
 
 sal[['TotalPayBenefits','title_len']].corr()
-
-
-# # Great Job!
